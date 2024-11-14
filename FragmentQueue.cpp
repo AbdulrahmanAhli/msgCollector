@@ -9,7 +9,7 @@ FragmentQueue::FragmentQueue() : front(nullptr), rear(nullptr), size(0) {}
 FragmentQueue::~FragmentQueue() {
 	while (!isEmpty()) {
 		Fragment* fragment = dequeue(); // Dequeue each fragment
-		delete fragment;                // Delete the fragment to free memory
+		delete fragment;	// Delete the fragment to free memory
 	}
 }
 
@@ -36,25 +36,25 @@ void FragmentQueue::enqueue(Fragment* fragment) {
 	}
 
 	rear = newNode; // Update rear pointer to point to new node
-	size++;         // Increment size of the queue
+	size++;		// Increment size of the queue
 }
 
 // Remove and return a Fragment from the front of the queue
 Fragment* FragmentQueue::dequeue() {
 	if (isEmpty()) return nullptr; // Return null if queue is empty
 
-	Node* temp = front;           // Store current front node for deletion
+	Node* temp = front;		// Store current front node for deletion
 	Fragment* fragment = temp->data; // Get data from front node
 
-	front = front->next;          // Move front pointer to next node
+	front = front->next; // Move front pointer to next node
 
-	if (front == nullptr) {       // If queue becomes empty, update rear pointer as well
+	if (front == nullptr) { // If queue becomes empty, update rear pointer as well
 		rear = nullptr;
 	}
 
-	delete temp;                  // Delete old front node to free memory
-	size--;                       // Decrement size of the queue
-	return fragment;              // Return dequeued fragment
+	delete temp;// Delete old front node to free memory
+	size--;	// Decrement size of the queue
+	return fragment;	// Return dequeued fragment
 }
 
 // Check if the queue is empty by comparing size with zero

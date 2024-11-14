@@ -1,10 +1,3 @@
-
-
-
-
-
-
-
 // Conversation.h
 
 #pragma once
@@ -20,7 +13,7 @@ private:
 	// Node structure for linked list of fragments
 	struct Node {
 		Fragment* data; // Pointer to the Fragment data
-		Node* next;     // Pointer to the next node in the list
+		Node* next;	// Pointer to the next node in the list
 
 		// Constructor to initialize a Node with a Fragment
 		Node(Fragment* fragment);
