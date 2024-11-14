@@ -15,7 +15,7 @@ Conversation::~Conversation() {
 		Node* temp = current;
 		current = current->next;
 		delete temp->data; // Delete Fragment data
-		delete temp;       // Delete Node itself
+		delete temp; // Delete Node itself
 	}
 }
 

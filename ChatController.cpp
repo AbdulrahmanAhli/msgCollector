@@ -61,19 +61,19 @@ bool ChatController::handleFragment(Fragment* fragment) {
 		}
 
 		if (conversation->canAddFragment(fragment)) {
-			conversation->addFragment(fragment);  // Add Fragment to Conversation 
-			requeueCount = 0;  // Reset requeue count on successful addition 
-			return true;  // Return success status 
+			conversation->addFragment(fragment);	// Add Fragment to Conversation 
+			requeueCount = 0;	// Reset requeue count on successful addition 
+			return true;// Return success status 
 		}
 
 	}
 	catch (const std::exception& e) {
 		std::cerr << "Error handling fragment: " << e.what() << std::endl;
-		delete fragment;  // Clean up memory on error 
+		delete fragment;// Clean up memory on error 
 		return false;
 	}
 
-	return false;  // Return failure status if unable to handle Fragment 
+	return false;	// Return failure status if unable to handle Fragment 
 }
 
 // Process all Fragments in the queue until it's empty or max requeue attempts reached 
@@ -81,21 +81,21 @@ void ChatController::processQueue() {
 	while (!fragmentQueue.isEmpty()) {
 		Fragment* fragment = fragmentQueue.dequeue();
 
-		if (!handleFragment(fragment)) {  // Attempt to handle dequeued Fragment 
-			requeueCount++;  // Increment requeue count on failure 
+		if (!handleFragment(fragment)) {// Attempt to handle dequeued Fragment 
+			requeueCount++;// Increment requeue count on failure 
 
-			if (requeueCount >= MAX_REQUEUE_ATTEMPTS) {  // Check against max requeue attempts limit 
+			if (requeueCount >= MAX_REQUEUE_ATTEMPTS) {// Check against max requeue attempts limit 
 				std::cerr << "Maximum requeue attempts reached for fragment. Discarding.\n";
-				delete fragment;  // Discard Fragment after max attempts reached  
-				requeueCount = 0;  // Reset requeue count  
+				delete fragment;// Discard Fragment after max attempts reached  
+				requeueCount = 0;// Reset requeue count  
 			}
 			else {
 				try {
-					fragmentQueue.enqueue(fragment);  // Re-enqueue failed Fragment for future processing  
+					fragmentQueue.enqueue(fragment);// Re-enqueue failed Fragment for future processing  
 				}
 				catch (const std::exception& e) {
 					std::cerr << "Failed to requeue fragment: " << e.what() << std::endl;
-					delete fragment;  // Clean up memory on failure to requeue  
+					delete fragment;// Clean up memory on failure to requeue  
 				}
 			}
 		}
@@ -104,15 +104,15 @@ void ChatController::processQueue() {
 
 // Check if the Fragment queue is empty 
 bool ChatController::isQueueEmpty() const {
-	return fragmentQueue.isEmpty();  // Return result of queue empty check  
+	return fragmentQueue.isEmpty(); // Return result of queue empty check  
 }
 
 // Check if end of file has been reached during reading process 
 bool ChatController::isFileEOF() const {
-	return fileStream.eof();  // Return result of EOF check on file stream  
+	return fileStream.eof();// Return result of EOF check on file stream  
 }
 
 void ChatController::printConversations() {
-	conversationList.printConversations();  // Call method to print conversations  
+	conversationList.printConversations();// Call method to print conversations  
 }
 

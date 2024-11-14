@@ -10,14 +10,14 @@ private:
 	// Node structure to hold Fragment data and the next pointer
 	struct Node {
 		Fragment* data; // Pointer to the Fragment data
-		Node* next;     // Pointer to the next node in the queue
+		Node* next;		// Pointer to the next node in the queue
 
 		// Constructor to initialize a Node with a Fragment
 		Node(Fragment* fragment) : data(fragment), next(nullptr) {}
 	};
 	Node* front; // Pointer to the front of the queue
-	Node* rear;  // Pointer to the rear of the queue
-	int size;    // Current size of the queue
+	Node* rear;	// Pointer to the rear of the queue
+	int size;	// Current size of the queue
 	const int MAX_QUEUE_SIZE = 1000; // Maximum allowed size of the queue
 
 public:

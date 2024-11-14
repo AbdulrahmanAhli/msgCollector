@@ -10,12 +10,12 @@ int main()
 	std::mt19937 gen(rd());
 	std::uniform_int_distribution<> dis(5, 10); // Random number generate between 5 & 10
 
-	bool hasMoreData = true;  // denotes whether there is any more fragments yet to be processed
+	bool hasMoreData = true;	// denotes whether there is any more fragments yet to be processed
 	int iterationCount = 0;
 
 	while (hasMoreData)
 	{
-		if (controller.isQueueEmpty() && controller.isFileEOF())  //check if all fragments exhausted
+		if (controller.isQueueEmpty() && controller.isFileEOF())	//check if all fragments exhausted
 		{
 			std::cout << "\nAll conversations have been processed.\n";
 			break;
