@@ -1,24 +1,50 @@
-// ConversationList.h
+// ConversationList.cpp
 
-#pragma once
-#include "Conversation.h"
-#include <vector>
-#include <iostream>
-#include <stdexcept>
-#include <memory>
+#include "ConversationList.h"
 
-// Class to manage a list of conversations
-class ConversationList {
-private:
-	std::vector<Conversation*> conversations; // Vector to store pointers to Conversation objects
-	const size_t MAX_CONVERSATIONS = 1000; // Maximum allowed number of conversations
+// Initialize an empty ConversationList
+ConversationList::ConversationList() {}
 
-public:
-	ConversationList(); // Constructor to initialize an empty conversation list
-	~ConversationList(); // Destructor to clean up allocated Conversation objects
+// Destructor that deletes all conversations in the list
+ConversationList::~ConversationList() {
+	for (Conversation* conv : conversations) {
+		delete conv; // Free memory for each Conversation object
+	}
+}
 
-	Conversation* findConversation(int conversationId); // Find a conversation by its ID
-	void addConversation(Conversation* conversation); // Add a new conversation to the list
-	void printConversations() const; // Print details of all conversations in the list
-	size_t size() const; // Return the current number of conversations in the list
-};
+// Find and return a Conversation by its ID, or nullptr if not found
+Conversation* ConversationList::findConversation(int conversationId) {
+	for (Conversation* conv : conversations) {
+		if (conv && conv->getConversationId() == conversationId) {
+			return conv; // Return the matching Conversation
+		}
+	}
+	return nullptr; // Return nullptr if not found
+}
+
+// Add a new Conversation to the list, throwing an error if null or max size reached
+void ConversationList::addConversation(Conversation* conversation) {
+	if (!conversation) {
+		throw std::invalid_argument("Cannot add null conversation"); // Validate input
+	}
+
+	if (conversations.size() >= MAX_CONVERSATIONS) {
+		throw std::runtime_error("Maximum number of conversations reached"); // Check size limit
+	}
+
+	conversations.push_back(conversation); // Add the conversation to the vector
+}
+
+// Print details of all stored conversations to standard output
+void ConversationList::printConversations() const {
+	for (const Conversation* conv : conversations) {
+		if (conv) {
+			std::cout << conv->toString() << "\n"; // Output string representation of each conversation
+		}
+	}
+}
+
+// Return the current number of conversations in the list
+size_t ConversationList::size() const {
+	return conversations.size(); // Return size of the vector
+}
