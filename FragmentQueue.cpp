@@ -1,68 +1,80 @@
-
-
 #include "FragmentQueue.h"
 
-// Initialize an empty queue with front and rear pointers set to nullptr and size to 0
+// Initialize an empty queue
 FragmentQueue::FragmentQueue() : front(nullptr), rear(nullptr), size(0) {}
 
-// Destructor that dequeues all fragments and deletes them to free memory
+// Destructor to free memory
 FragmentQueue::~FragmentQueue() {
-	while (!isEmpty()) {
-		Fragment* fragment = dequeue(); // Dequeue each fragment
-		delete fragment;	// Delete the fragment to free memory
-	}
+    while (!isEmpty()) {
+        Fragment* fragment = dequeue();
+        delete fragment;
+    }
 }
 
-// Add a new Fragment to the rear of the queue
+// Add a new Fragment based on its weight
 void FragmentQueue::enqueue(Fragment* fragment) {
-	if (!fragment) {
-		throw std::invalid_argument("Cannot enqueue null fragment"); // Ensure fragment is not null
-	}
+    if (!fragment) {
+        throw std::invalid_argument("Cannot enqueue null fragment");
+    }
 
-	if (isFull()) {
-		throw std::runtime_error("Queue is full"); // Check if queue has reached its max size
-	}
-	
+    if (isFull()) {
+        throw std::runtime_error("Queue is full");
+    }
 
-	Node* newNode = new Node(fragment); // Create a new node for the fragment
-	if (!newNode) {
-		throw std::bad_alloc(); // Handle memory allocation failure for new node
-	}
+    Node* newNode = new Node(fragment);
+    if (!newNode) {
+        throw std::bad_alloc();
+    }
 
-	if (isEmpty()) {
-		front = newNode; // If queue is empty, set front to new node
-	}
-	else {
-		rear->next = newNode; // Link new node at the end of the queue
-	}
+    // If the queue is empty, add as the only node
+    if (isEmpty()) {
+        front = rear = newNode;
+    }
+    // Insert at the front if the fragment has the highest weight
+    else if (fragment->getWeight() > front->data->getWeight()) {
+        newNode->next = front;
+        front = newNode;
+    }
+    else {
+        // Find the correct position
+        Node* current = front;
+        while (current->next != nullptr &&
+            current->next->data->getWeight() >= fragment->getWeight()) {
+            current = current->next;
+        }
+        newNode->next = current->next;
+        current->next = newNode;
 
-	rear = newNode; // Update rear pointer to point to new node
-	size++;		// Increment size of the queue
+        // Update rear if new node is added at the end
+        if (newNode->next == nullptr) {
+            rear = newNode;
+        }
+    }
+    size++;
 }
 
-// Remove and return a Fragment from the front of the queue
+// Remove and return the highest-weight Fragment
 Fragment* FragmentQueue::dequeue() {
-	if (isEmpty()) return nullptr; // Return null if queue is empty
+    if (isEmpty()) return nullptr;
 
-	Node* temp = front;		// Store current front node for deletion
-	Fragment* fragment = temp->data; // Get data from front node
+    Node* temp = front;
+    Fragment* fragment = temp->data;
 
-	front = front->next; // Move front pointer to next node
+    front = front->next;
+    if (front == nullptr) {
+        rear = nullptr;
+    }
 
-	if (front == nullptr) { // If queue becomes empty, update rear pointer as well
-		rear = nullptr;
-	}
-
-	delete temp;// Delete old front node to free memory
-	size--;	// Decrement size of the queue
-	return fragment;	// Return dequeued fragment
+    delete temp;
+    size--;
+    return fragment;
 }
 
-// Check if the queue is empty by comparing size with zero
+// Check if the queue is empty
 bool FragmentQueue::isEmpty() const { return size == 0; }
 
-// Check if the queue is full by comparing size with maximum allowed size
+// Check if the queue is full
 bool FragmentQueue::isFull() const { return size >= MAX_QUEUE_SIZE; }
 
-// Return current number of elements in the queue
+// Return current size of the queue
 int FragmentQueue::getSize() const { return size; }

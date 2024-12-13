@@ -38,5 +38,7 @@ public:
 
 	// Method to get the current size of the queue
 	int getSize() const;
+	
 	bool isFull() const;
+	
 };
